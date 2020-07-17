@@ -8,6 +8,7 @@ import java.awt.Component;
 import javax.swing.Box;
 import com.toedter.calendar.JDateChooser;
 
+import died.tp.controllers.CamionController;
 import died.tp.jframes.MenuCamiones;
 
 import javax.swing.JButton;
@@ -28,6 +29,9 @@ public class AgregarCamion extends JPanel {
 	public AgregarCamion() {
 		setLayout(null);
 		setSize(550, 400);
+		
+		//Controller
+		CamionController cc = new CamionController(this);
 		
 		JLabel lblPatente = new JLabel("Patente");
 		lblPatente.setBounds(50, 30, 120, 20);
@@ -105,6 +109,11 @@ public class AgregarCamion extends JPanel {
 		add(btnVolver);
 		
 		JButton btnAgregarCamion = new JButton("Agregar");
+		btnAgregarCamion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnAgregarCamion.setBounds(365, 250, 120, 30);
 		add(btnAgregarCamion);
 

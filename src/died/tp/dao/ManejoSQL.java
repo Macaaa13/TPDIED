@@ -1,10 +1,7 @@
-package died.tp.conexionbd;
+package died.tp.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.*;
+import java.util.*;
 
 public class ManejoSQL {
 
@@ -19,7 +16,7 @@ public class ManejoSQL {
 			+ "costoKM DOUBLE,"
 			+ "fechaCompra DATE"
 			+ ")";
-
+	
 	private String crearTablaInsumo =
 			"CREATE TABLE Insumo("
 			+ "id_insumo INT PRIMARY KEY AUTO_INCREMENT,"
@@ -28,7 +25,7 @@ public class ManejoSQL {
 			+ "peso DOUBLE,"
 			+ "densidad DOUBLE"
 			+ ")";
-
+	
 	private String crearTablaPlanta = 
 			"CREATE TABLE Planta("
 			+ "id_planta INT PRIMARY KEY AUTO_INCREMENT,"
@@ -42,24 +39,20 @@ public class ManejoSQL {
 			+ "estado ENUM ('creada','procesada','entregada','cancelado'),"
 			+ "camionAsignado INT REFERENCES Camion(id_camion)"
 			+ ")";
-
+	
 	public ManejoSQL() {
-
+		
 	}
-
-
+	
 	public void crearTablas() throws SQLException {
+		
+		Conexion conexion = new Conexion();
+
 		Connection con = null;
 
-		String sURL = "jdbc:mysql://localhost:3306/trabajopracticodied";
-
-		Properties p = new Properties();
-		p.put("user", "root");
-		p.put("password","onestepcloser01");
-
-		con = DriverManager.getConnection(sURL,p);
 		PreparedStatement stmt = null;
 		try {
+			  con = conexion.conectar();
 			  stmt = con.prepareStatement(crearTablaCamion);  
 			  stmt.execute(); 
 			  stmt = con.prepareStatement(crearTablaInsumo);
@@ -73,7 +66,6 @@ public class ManejoSQL {
 			  System.out.println("Error en la ejecución: " 
 			    + sqle.getErrorCode() + " " + sqle.getMessage());    
 			}
-
+				
 	}
-	
 }

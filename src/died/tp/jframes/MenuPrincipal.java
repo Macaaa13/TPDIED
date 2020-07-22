@@ -3,6 +3,9 @@ package died.tp.jframes;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import died.tp.jpanel.camion.PanelCamiones;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -42,9 +45,8 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuCamiones = new JButton("Camiones");
 		botonMenuCamiones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuCamiones mc = new MenuCamiones();
-				mc.setVisible(true);
-				dispose();
+				setContentPane(new PanelCamiones());
+				setTitle("Camiones");
 			}
 		});
 		botonMenuCamiones.setBounds(210, 70, 120, 30);
@@ -53,9 +55,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuPlantas = new JButton("Plantas");
 		botonMenuPlantas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuPlantas mp = new MenuPlantas();
-				mp.setVisible(true);
-				dispose();
+			
 			}
 		});
 		botonMenuPlantas.setBounds(210, 115, 120, 30);
@@ -64,9 +64,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuInsumos = new JButton("Insumos");
 		botonMenuInsumos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuInsumos mi = new MenuInsumos();
-				mi.setVisible(true);
-				dispose();
+			
 			}
 		});
 		botonMenuInsumos.setBounds(210, 160, 120, 30);
@@ -75,9 +73,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuStock = new JButton("Stock");
 		botonMenuStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuStock ms = new MenuStock();
-				ms.setVisible(true);
-				dispose();
+
 			}
 		});
 		botonMenuStock.setBounds(210, 205, 120, 30);
@@ -86,9 +82,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuPedidos = new JButton("Pedidos");
 		botonMenuPedidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuPedidos mp = new MenuPedidos();
-				mp.setVisible(true);
-				dispose();
+
 			}
 		});
 		botonMenuPedidos.setBounds(210, 250, 120, 30);

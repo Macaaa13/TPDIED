@@ -7,37 +7,37 @@ public class ManejoSQL {
 
 	private String crearTablaCamion = 	
 			"CREATE TABLE Camion("
-			+ "id_camion INT PRIMARY KEY AUTO_INCREMENT,"
-			+ "patente VARCHAR(8),"
-			+ "marca VARCHAR(15),"
-			+ "modelo VARCHAR(25),"
-			+ "kmRecorrios INT,"
-			+ "costoHora DOUBLE,"
-			+ "costoKM DOUBLE,"
-			+ "fechaCompra DATE"
+			+ "ID_CAMION INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "PATENTE VARCHAR(8),"
+			+ "MARCA VARCHAR(15),"
+			+ "MODELO VARCHAR(25),"
+			+ "KMRECORRIDOS INT,"
+			+ "COSTOHORA DOUBLE,"
+			+ "COSTOKM DOUBLE,"
+			+ "FECHACOMPRA DATE"
 			+ ")";
 	
 	private String crearTablaInsumo =
 			"CREATE TABLE Insumo("
-			+ "id_insumo INT PRIMARY KEY AUTO_INCREMENT,"
-			+ "unidadMedida VARCHAR(10),"
-			+ "costoUnidad DOUBLE,"
-			+ "peso DOUBLE,"
-			+ "densidad DOUBLE"
+			+ "ID_INSUMO INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "UNIDAD VARCHAR(10),"
+			+ "COSTOUNIDAD DOUBLE,"
+			+ "PESO DOUBLE,"
+			+ "DENSIDAD DOUBLE"
 			+ ")";
 	
 	private String crearTablaPlanta = 
 			"CREATE TABLE Planta("
-			+ "id_planta INT PRIMARY KEY AUTO_INCREMENT,"
-			+ "nombrePlanta VARCHAR(15)"
+			+ "ID_PLANTA INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "NOMBREPLANTA VARCHAR(15)"
 			+ ")";
 	private String crearTablaOrdenPedido = 
 			"CREATE TABLE OrdenPedido("
-			+ "id_ordenPedido INT PRIMARY KEY AUTO_INCREMENT,"
-			+ "plantaOrigen INT REFERENCES Planta(id_planta),"
-			+ "plantaDestino INT REFERENCES Planta(id_planta),"
-			+ "estado ENUM ('creada','procesada','entregada','cancelado'),"
-			+ "camionAsignado INT REFERENCES Camion(id_camion)"
+			+ "ID_ORDENPEDIDO INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "PLANTAORIGEN INT REFERENCES Planta(id_planta),"
+			+ "PLANTADESTINO INT REFERENCES Planta(id_planta),"
+			+ "ESTADO ENUM ('creada','procesada','entregada','cancelado'),"
+			+ "CAMIONASIGNADO INT REFERENCES Camion(id_camion)"
 			+ ")";
 	
 	public ManejoSQL() {

@@ -3,29 +3,17 @@ package died.tp.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class Conexion {
 
-	private static final String controlador = "com.mysql.jdbc.Driver";
-	private static final String url = "jdbc:mysql://localhost:3306/trabajopracticodied";
+	private static final String url = "jdbc:mysql://localhost:3306/trabajopracticodied?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private static final String usuario = "root";
 	private static final String clave = "root";
-		
-	private Properties pr;
 
-	public Conexion() {
-		pr = new Properties();
-		pr.put("user", "root");
-		pr.put("password",clave);
-	}
-
-	public Connection conectar() {
+	public static Connection conectar() {
 		Connection c = null;
 		try {
 			c = DriverManager.getConnection(url,usuario,clave);			
-			System.out.println("Conexión realizada");
-			c = DriverManager.getConnection(url,this.pr);			
 			//System.out.println("Conexión realizada");
 
 			} catch(SQLException e) {
@@ -34,5 +22,9 @@ public class Conexion {
 			} 
 		
 		return c;
+	}
+	
+	public static Connection getConection() {
+		return conectar();
 	}
 }

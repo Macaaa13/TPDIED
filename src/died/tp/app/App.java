@@ -10,7 +10,8 @@ public class App {
 
 		ManejoSQL management = new ManejoSQL();
 		management.crearTablas();
-
+		System.out.println("Tablas creadas");
+		
 	}
 
 }

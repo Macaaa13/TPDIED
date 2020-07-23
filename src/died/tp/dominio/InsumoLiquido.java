@@ -28,5 +28,17 @@ public class InsumoLiquido extends Insumo{
 	public Integer pesoPorUnidad() {
 		return null;
 	}
+
+
+	@Override
+	public boolean esLiquido() {
+		return true;
+	}
+
+
+	@Override
+	public boolean esGeneral() {
+		return false;
+	}
 	
 }

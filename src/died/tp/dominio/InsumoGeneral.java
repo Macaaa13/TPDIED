@@ -29,4 +29,16 @@ public class InsumoGeneral extends Insumo{
 		return null;
 	}
 
+
+	@Override
+	public boolean esLiquido() {
+		return false;
+	}
+
+
+	@Override
+	public boolean esGeneral() {
+		return true;
+	}
+
 }

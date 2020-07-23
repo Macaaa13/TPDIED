@@ -7,9 +7,9 @@ public class Camion {
 	//Atributos
 	private Integer id;
 	private String patente;
-	private Integer modelo;
+	private String modelo;
 	private String marca;
-	private Integer kmRecorridos;
+	private Double kmRecorridos;
 	private Double costoKM;
 	private Double costoHora;
 	private LocalDate fechaCompra;
@@ -32,11 +32,11 @@ public class Camion {
 		this.patente = patente;
 	}
 	
-	public Integer getModelo() {
+	public String getModelo() {
 		return modelo;
 	}
 	
-	public void setModelo(Integer modelo) {
+	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
 	
@@ -48,11 +48,11 @@ public class Camion {
 		this.marca = marca;
 	}
 	
-	public Integer getKmRecorridos() {
+	public Double getKmRecorridos() {
 		return kmRecorridos;
 	}
 	
-	public void setKmRecorridos(Integer kmRecorridos) {
+	public void setKmRecorridos(Double kmRecorridos) {
 		this.kmRecorridos = kmRecorridos;
 	}
 	

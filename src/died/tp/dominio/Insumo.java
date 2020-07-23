@@ -3,10 +3,14 @@ package died.tp.dominio;
 public abstract class Insumo {
 
 	//Atributos
+	private Integer id;
 	private String descripcion;
 	private String uMedida;
 	private Integer costo;
+	
 	public abstract Integer pesoPorUnidad();
+	public abstract boolean esLiquido();
+	public abstract boolean esGeneral();
 	
 	//Constructor
 	public Insumo(String d, String u, Integer c) {
@@ -17,6 +21,13 @@ public abstract class Insumo {
 	
 	
 	//Getters and setters
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}

@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -14,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
@@ -25,11 +29,13 @@ import died.tp.jframes.MenuPrincipal;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Window;
 
 import javax.swing.Box;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 
 public class PanelCamiones extends JPanel {
 	
@@ -110,12 +116,21 @@ public class PanelCamiones extends JPanel {
 		
 		cc = new CamionController(this);
 		
+		
 		//Tabla
 		ModeloTablaCamion tablaModelo = new ModeloTablaCamion();
 		
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tablaDatos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent evt) {
+				if(tablaDatos.getSelectedRow() != -1) {
+					cargarFilaSeleccionada(tablaModelo, tablaDatos.getSelectedRow());
+				}
+			}
+		});
 		
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
 		scrollPanel.setBounds(350, 50, 800, 280);
@@ -126,12 +141,12 @@ public class PanelCamiones extends JPanel {
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					cc.guardar();
-					JOptionPane.showMessageDialog(null, "Camión agregado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
-					limpiar();
-				} catch(DatosObligatoriosException | FormatoNumeroException ex) {
-					System.out.println(ex.getMessage());;
+				if(cc.validacionVacios()) {
+					if(cc.camposCorrectos()) {
+						cc.guardar();
+						JOptionPane.showMessageDialog(null, "Camión agregado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+						limpiar();
+					}
 				}
 			}
 		});
@@ -146,6 +161,7 @@ public class PanelCamiones extends JPanel {
 					if(rta == JOptionPane.YES_OPTION) {
 						cc.eliminarCamion(tablaModelo.eliminarFila(tablaDatos.getSelectedRow()));
 						tablaModelo.fireTableDataChanged();
+						limpiar();
 						JOptionPane.showMessageDialog(null, "Camión eliminado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
 					} 
 				}
@@ -157,31 +173,23 @@ public class PanelCamiones extends JPanel {
 		btnEliminar.setBounds(50, 359, 120, 30);
 		add(btnEliminar);
 		
-		JButton btnGuardarCambios = new JButton("Guardar");
-		btnGuardarCambios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		btnGuardarCambios.setBounds(311, 359, 120, 30);
-		add(btnGuardarCambios);
-		
-		//ALTERNATIVA: AL SELECCIONAR UNA FILA SE PASAN LOS DATOS A LOS TEXTFIELDS
-		//DEBERÍA CREARSE UNA FUNCIÓN PARA PASAR LOS DATOS Y ELIMINAR EL BOTÓN GUARDAR
+
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(tablaDatos.getSelectedRow() != -1) {
-					int fila = tablaDatos.getSelectedRow();
-					textFieldPatente.setText(tablaModelo.getValueAt(fila, 1).toString()); 
-					textFieldMarca.setText(tablaModelo.getValueAt(fila, 2).toString());
-					textFieldModelo.setText(tablaModelo.getValueAt(fila, 3).toString());
-					textFieldKMRecorridos.setText(tablaModelo.getValueAt(fila, 4).toString());
-					textFieldCostoKM.setText(tablaModelo.getValueAt(fila, 5).toString());
-					textFieldCostoHora.setText(tablaModelo.getValueAt(fila, 6).toString());
-					dateChooserFechaCompra.setDate(Date.valueOf(tablaModelo.getValueAt(fila, 7).toString()));
-					btnEliminar.setEnabled(false);
-					btnGuardarCambios.setEnabled(true);
+					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de modificar el camión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+					if(rta == JOptionPane.YES_OPTION) {
+						if(cc.validacionVacios()) {
+							if(cc.camposCorrectos()) {
+								cc.actualizar((Integer)tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0));
+								tablaModelo.mostrar(cc.traerDatos());
+								tablaModelo.fireTableDataChanged();
+								JOptionPane.showMessageDialog(null, "Camión modificado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+								limpiar();
+							}
+						}
+					} 
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Debe seleccionar el camión que desea modificar", "Advertencia", JOptionPane.OK_OPTION);
@@ -194,12 +202,12 @@ public class PanelCamiones extends JPanel {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limpiar();
 				tablaModelo.limpiar();
 				tablaModelo.fireTableDataChanged();
 				btnModificar.setEnabled(false);
 				btnEliminar.setEnabled(false);
 				btnCancelar.setEnabled(false);
-				btnGuardarCambios.setEnabled(false);
 				btnAgregar.setEnabled(true);
 			}
 		});
@@ -222,13 +230,23 @@ public class PanelCamiones extends JPanel {
 		add(btnBuscar);
 		
 		JButton button = new JButton("Volver");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rta = JOptionPane.showConfirmDialog(null, "¿Desea volver al menu principal? \n Los datos no guardados se perderán", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+				if(rta == JOptionPane.OK_OPTION) {
+					Window w = SwingUtilities.getWindowAncestor(PanelCamiones.this);
+					w.dispose();
+					MenuPrincipal mp = new MenuPrincipal();
+					mp.setVisible(true);
+				}
+			}
+		});
 		button.setBounds(1030, 359, 120, 30);
 		add(button);
 		
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 		btnCancelar.setEnabled(false);
-		btnGuardarCambios.setEnabled(false);
 		
 		
 		//TextFields
@@ -307,5 +325,19 @@ public class PanelCamiones extends JPanel {
 		textFieldCostoHora.setText("");
 		textFieldCostoKM.setText("");
 		dateChooserFechaCompra.setDate(Date.valueOf(LocalDate.now()));
+	}
+	
+	public void cargarFilaSeleccionada(ModeloTablaCamion mtc, int fila) {
+		textFieldPatente.setText(mtc.getValueAt(fila, 1).toString()); 
+		textFieldMarca.setText(mtc.getValueAt(fila, 2).toString());
+		textFieldModelo.setText(mtc.getValueAt(fila, 3).toString());
+		textFieldKMRecorridos.setText(mtc.getValueAt(fila, 4).toString());
+		textFieldCostoKM.setText(mtc.getValueAt(fila, 5).toString());
+		textFieldCostoHora.setText(mtc.getValueAt(fila, 6).toString());
+		dateChooserFechaCompra.setDate(Date.valueOf(mtc.getValueAt(fila, 7).toString()));
+	}
+	
+	public void informarValidacion(String error) {
+		JOptionPane.showMessageDialog(null, error);
 	}
 }

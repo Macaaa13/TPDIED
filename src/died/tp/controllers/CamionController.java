@@ -49,8 +49,20 @@ public class CamionController {
 			if(pc.getTextFieldCostoHora()!=null) c.setCostoHora(Double.valueOf(pc.getTextFieldCostoHora().getText()));
 			if(pc.getDateChooserFechaCompra()!=null) c.setFechaCompra(pc.getDateChooserFechaCompra().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		} catch(NumberFormatException nfe) {
-			throw new FormatoNumeroException();
+			nfe.printStackTrace();
 		}
 	}
 	
+	public List<Camion> traerDatos() {
+		return cd.buscarTodos();
+	}
+	
+	public void eliminarCamion(Integer id) {
+		cd.eliminarCamion(id);
+	}
+	
+	//Cómo implementar la búsqueda por varios campos?
+	public void buscar() {
+		
+	}
 }

@@ -45,6 +45,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuCamiones = new JButton("Camiones");
 		botonMenuCamiones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setBounds(dim.width/2-600,dim.height/2-225, 1200, 450);
 				setContentPane(new PanelCamiones());
 				setTitle("Camiones");
 			}

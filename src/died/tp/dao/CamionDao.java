@@ -63,13 +63,13 @@ public class CamionDao {
 		}
 	}
 
-	public void eliminarCamion(Camion c) {
+	public void eliminarCamion(Integer id) {
 		Connection con = null;
 		con = Conexion.conectar();
 		PreparedStatement pr = null;
 		try {
 			pr = con.prepareStatement(delete);
-			pr.setInt(1, c.getId());
+			pr.setInt(1, id);
 			pr.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("error al eliminar");

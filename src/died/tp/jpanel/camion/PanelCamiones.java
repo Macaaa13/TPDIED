@@ -2,23 +2,34 @@ package died.tp.jpanel.camion;
 
 import java.awt.event.ActionEvent;
 
+
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
 import died.tp.excepciones.*;
 import died.tp.controllers.CamionController;
+import died.tp.dominio.Camion;
 import died.tp.jframes.MenuPrincipal;
+
+import java.awt.BorderLayout;
 import java.awt.Component;
+
 import javax.swing.Box;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.JFormattedTextField;
 
 public class PanelCamiones extends JPanel {
 	
@@ -95,19 +106,23 @@ public class PanelCamiones extends JPanel {
 	 */
 	public PanelCamiones() {
 		setLayout(null);
-		setSize(550,400);
+		setSize(1200,400);
 		
 		cc = new CamionController(this);
 		
-		JLabel lblPatente = new JLabel("Patente:");
-		lblPatente.setBounds(50, 51, 120, 20);
-		add(lblPatente);
+		//Tabla
+		ModeloTablaCamion tablaModelo = new ModeloTablaCamion();
 		
-		textFieldPatente = new JTextField();
-		textFieldPatente.setColumns(10);
-		textFieldPatente.setBounds(180, 51, 120, 20);
-		add(textFieldPatente);
+		JTable tablaDatos = new JTable(tablaModelo);
+		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
+		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
+		scrollPanel.setBounds(350, 50, 800, 280);
+		add(scrollPanel, BorderLayout.CENTER);
+		
+		
+		//Botones
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -120,33 +135,107 @@ public class PanelCamiones extends JPanel {
 				}
 			}
 		});
-		btnAgregar.setBounds(380, 51, 120, 30);
+		btnAgregar.setBounds(50, 312, 120, 30);
 		add(btnAgregar);
 		
-		JButton btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(380, 91, 120, 30);
-		add(btnModificar);
-		
 		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(380, 131, 120, 30);
-		add(btnEliminar);
-		
-		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(380, 171, 120, 30);
-		add(btnBuscar);
-		
-		JButton btnVolver = new JButton("Volver");
-		btnVolver.addActionListener(new ActionListener() {
+		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea salir? \n Los datos se perderán.", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
-				if(resp == JOptionPane.OK_OPTION) {
-					MenuPrincipal mp = new MenuPrincipal();
-					mp.setVisible(true);
+				if(tablaDatos.getSelectedRow() != -1) {
+					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el camión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+					if(rta == JOptionPane.YES_OPTION) {
+						cc.eliminarCamion(tablaModelo.eliminarFila(tablaDatos.getSelectedRow()));
+						tablaModelo.fireTableDataChanged();
+						JOptionPane.showMessageDialog(null, "Camión eliminado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+					} 
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar el camión que desea eliminar", "Advertencia", JOptionPane.OK_OPTION);
 				}
 			}
 		});
-		btnVolver.setBounds(380, 251, 120, 30);
-		add(btnVolver);
+		btnEliminar.setBounds(50, 359, 120, 30);
+		add(btnEliminar);
+		
+		JButton btnGuardarCambios = new JButton("Guardar");
+		btnGuardarCambios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnGuardarCambios.setBounds(311, 359, 120, 30);
+		add(btnGuardarCambios);
+		
+		//ALTERNATIVA: AL SELECCIONAR UNA FILA SE PASAN LOS DATOS A LOS TEXTFIELDS
+		//DEBERÍA CREARSE UNA FUNCIÓN PARA PASAR LOS DATOS Y ELIMINAR EL BOTÓN GUARDAR
+		JButton btnModificar = new JButton("Modificar");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tablaDatos.getSelectedRow() != -1) {
+					int fila = tablaDatos.getSelectedRow();
+					textFieldPatente.setText(tablaModelo.getValueAt(fila, 1).toString()); 
+					textFieldMarca.setText(tablaModelo.getValueAt(fila, 2).toString());
+					textFieldModelo.setText(tablaModelo.getValueAt(fila, 3).toString());
+					textFieldKMRecorridos.setText(tablaModelo.getValueAt(fila, 4).toString());
+					textFieldCostoKM.setText(tablaModelo.getValueAt(fila, 5).toString());
+					textFieldCostoHora.setText(tablaModelo.getValueAt(fila, 6).toString());
+					dateChooserFechaCompra.setDate(Date.valueOf(tablaModelo.getValueAt(fila, 7).toString()));
+					btnEliminar.setEnabled(false);
+					btnGuardarCambios.setEnabled(true);
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar el camión que desea modificar", "Advertencia", JOptionPane.OK_OPTION);
+				}
+			}
+		});
+		btnModificar.setBounds(180, 359, 120, 30);
+		add(btnModificar);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tablaModelo.limpiar();
+				tablaModelo.fireTableDataChanged();
+				btnModificar.setEnabled(false);
+				btnEliminar.setEnabled(false);
+				btnCancelar.setEnabled(false);
+				btnGuardarCambios.setEnabled(false);
+				btnAgregar.setEnabled(true);
+			}
+		});
+		btnCancelar.setBounds(900, 359, 120, 30);
+		add(btnCancelar);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//cc.buscar();
+				tablaModelo.mostrar(cc.traerDatos());
+				tablaModelo.fireTableDataChanged();
+				btnCancelar.setEnabled(true);
+				btnAgregar.setEnabled(false);
+				btnModificar.setEnabled(true);
+				btnEliminar.setEnabled(true);
+			}
+		});
+		btnBuscar.setBounds(180, 312, 120, 30);
+		add(btnBuscar);
+		
+		JButton button = new JButton("Volver");
+		button.setBounds(1030, 359, 120, 30);
+		add(button);
+		
+		btnModificar.setEnabled(false);
+		btnEliminar.setEnabled(false);
+		btnCancelar.setEnabled(false);
+		btnGuardarCambios.setEnabled(false);
+		
+		
+		//TextFields
+		textFieldPatente = new JTextField();
+		textFieldPatente.setColumns(10);
+		textFieldPatente.setBounds(180, 51, 120, 20);
+		add(textFieldPatente);
 		
 		dateChooserFechaCompra = new JDateChooser();
 		dateChooserFechaCompra.setBounds(180, 261, 120, 20);
@@ -178,6 +267,12 @@ public class PanelCamiones extends JPanel {
 		textFieldMarca.setBounds(180, 86, 120, 20);
 		add(textFieldMarca);
 		
+		
+		//Labels
+		JLabel lblPatente = new JLabel("Patente:");
+		lblPatente.setBounds(50, 51, 120, 20);
+		add(lblPatente);
+		
 		JLabel lblMarca = new JLabel("Marca:");
 		lblMarca.setBounds(50, 86, 120, 20);
 		add(lblMarca);
@@ -186,21 +281,21 @@ public class PanelCamiones extends JPanel {
 		lblModelo.setBounds(50, 121, 120, 20);
 		add(lblModelo);
 		
-		JLabel label_3 = new JLabel("KM recorridos:");
-		label_3.setBounds(50, 156, 120, 20);
-		add(label_3);
+		JLabel lblKMRecorridos = new JLabel("KM recorridos:");
+		lblKMRecorridos.setBounds(50, 156, 120, 20);
+		add(lblKMRecorridos);
 		
-		JLabel label_4 = new JLabel("Costo por KM:");
-		label_4.setBounds(50, 191, 120, 20);
-		add(label_4);
+		JLabel lblCostoKM = new JLabel("Costo por KM:");
+		lblCostoKM.setBounds(50, 191, 120, 20);
+		add(lblCostoKM);
 		
-		JLabel label_5 = new JLabel("Costo por hora:");
-		label_5.setBounds(50, 226, 120, 20);
-		add(label_5);
+		JLabel lblCostoHora = new JLabel("Costo por hora:");
+		lblCostoHora.setBounds(50, 226, 120, 20);
+		add(lblCostoHora);
 		
-		JLabel label_6 = new JLabel("Fecha de compra:");
-		label_6.setBounds(50, 261, 120, 20);
-		add(label_6);
+		JLabel lblFechaCompra = new JLabel("Fecha de compra:");
+		lblFechaCompra.setBounds(50, 261, 120, 20);
+		add(lblFechaCompra);
 		
 	}
 	

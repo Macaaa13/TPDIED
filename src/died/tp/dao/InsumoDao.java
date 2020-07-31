@@ -1,8 +1,11 @@
 package died.tp.dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 import died.tp.dominio.Camion;
 import died.tp.dominio.Insumo;
@@ -11,13 +14,12 @@ import died.tp.dominio.InsumoLiquido;
 
 public class InsumoDao {
 
-	private static final String selectAll = "SELECT id_insumo, unidadMedida, costoUnidad, peso, densidad FROM Insumo";
+	private static final String selectAll = "SELECT * FROM Insumo";
 	private static final String update = "UPDATE Insumo SET unidadMedida = ?, costuUnidad = ? where id_insumo = ?";
 	private static final String delete = "SET SQL_SAFE_UPDATES=0;"
 			+ "delete FROMM Insumo WHERE id_insumo = ?";
 	private static final String insert = " INSERT INTO Insumo (unidadMedida,costoUnidad) VALUES (?,?)";
 
-	//TODO Preguntar a Maca como podemos hacer para unificar en un solo metodo
 
 	public InsumoDao() {}
 
@@ -61,6 +63,50 @@ public class InsumoDao {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public List<Insumo> buscarTodos() {
+		List<Insumo> lista = new ArrayList<Insumo>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = Conexion.getConexion();
+			pstmt= conn.prepareStatement(selectAll);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Double den = rs.getDouble("densidad");
+				if(!(den == 0)) {
+					InsumoLiquido i = new InsumoLiquido();
+					i.setId(rs.getInt("id_insumo"));
+					i.setDescripcion(rs.getString("descripcion"));
+					i.setDensidad(den);
+					i.setuMedida(rs.getString("unidadMedida"));
+					i.setCosto(rs.getInt("costoUnidad"));
+					lista.add(i);
+				}
+				else {
+					InsumoGeneral i = new InsumoGeneral();
+					i.setId(rs.getInt("id_insumo"));
+					i.setDescripcion(rs.getString("descripcion"));
+					i.setuMedida(rs.getString("unidadMedida"));
+					i.setCosto(rs.getInt("costoUnidad"));
+					i.setPeso(rs.getDouble("peso"));
+					lista.add(i);
+				}
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) rs.close();
+				if(pstmt!=null) pstmt.close();
+				if(conn!=null) conn.close();				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}	
+		return lista;
 	}
 
 }

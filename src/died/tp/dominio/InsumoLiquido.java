@@ -3,22 +3,24 @@ package died.tp.dominio;
 public class InsumoLiquido extends Insumo{
 
 	//Atributos
-	private Integer densidad;
+	private Double densidad;
 
 	
 	//Constructor
-	public InsumoLiquido(String d, String u, Integer c, Integer den) {
+	public InsumoLiquido(String d, String u, Integer c, Double den) {
 		super(d, u, c);
 		this.densidad = den;
 	}
 	
+	public InsumoLiquido() {};
+	
 
 	//Gettters y Setters
-	public Integer getDensidad() {
+	public Double getDensidad() {
 		return densidad;
 	}
 
-	public void setDensidad(Integer densidad) {
+	public void setDensidad(Double densidad) {
 		this.densidad = densidad;
 	}
 	
@@ -39,6 +41,17 @@ public class InsumoLiquido extends Insumo{
 	@Override
 	public boolean esGeneral() {
 		return false;
+	}
+	
+	@Override
+	public void setPesoDensidad(Double d) {
+		this.densidad = d;
+
+	}
+
+	@Override
+	public Double getPesoDensidad() {
+		return this.densidad;
 	}
 	
 }

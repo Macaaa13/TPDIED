@@ -3,22 +3,24 @@ package died.tp.dominio;
 public class InsumoGeneral extends Insumo{
 
 	//Atributos
-	private Integer peso;
+	private Double peso;
 	
 	
 	//Constructos
-	public InsumoGeneral(String d, String u, Integer c, Integer p) {
+	public InsumoGeneral(String d, String u, Integer c, Double p) {
 		super(d, u, c);
 		this.peso = p;
 	}
+	
+	public InsumoGeneral() {};
 
 
 	//Getters y Setters
-	public Integer getPeso() {
+	public Double getPeso() {
 		return peso;
 	}
 
-	public void setPeso(Integer peso) {
+	public void setPeso(Double peso) {
 		this.peso = peso;
 	}
 	
@@ -41,4 +43,15 @@ public class InsumoGeneral extends Insumo{
 		return true;
 	}
 
+	@Override
+	public void setPesoDensidad(Double peso) {
+		this.peso = peso;
+
+	}
+
+	@Override
+	public Double getPesoDensidad() {
+		return this.peso;
+	}
+	
 }

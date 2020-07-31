@@ -15,16 +15,23 @@ public class ModeloTablaInsumo extends AbstractTableModel {
 	private String[] columnNames = {"ID_Insumo","Descripcion","Unidad de Medida","Costo unidad", "Peso", "Densidad"};
 	private List<Insumo> data = new ArrayList<Insumo>();
 	
-	@Override
-	public int getRowCount() {
-		return data.size();
+	public void mostrar(List<Insumo> lista) {
+		if(lista!=null) {
+			data = lista;
+		}
 	}
-
-	@Override
-	public int getColumnCount() {
-		return columnNames.length;
+	
+	public int eliminarFila(int fila) {
+		int id = (int)getValueAt(fila,0);
+		data.remove(fila);
+		return id;
 	}
-
+	
+	//Métodos
+	void limpiar() {
+		data.clear();
+	}
+	
 	@Override
 	public Object getValueAt(int fila, int columna) {
 		Insumo i = data.get(fila);
@@ -41,14 +48,36 @@ public class ModeloTablaInsumo extends AbstractTableModel {
 				if(i.esGeneral()) {
 					InsumoGeneral ig = (InsumoGeneral) i;
 					return ig.getPeso();
+				} else {
+					return "-";
 				}
 			case 5:
 				if(i.esLiquido()) {
 					InsumoLiquido il = (InsumoLiquido) i;
 					return il.getDensidad();
+				} else {
+					return "-";
 				}
 		}
 		return null;
+	}
+	
+	@Override
+	public int getRowCount() {
+		return data.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		return columnNames.length;
+	}
+	
+	public String getColumnName(int col) {
+		return columnNames[col];
+	}
+	
+	public Class getColumnClass(int c) {
+		return getValueAt(0,c).getClass();
 	}
 
 }

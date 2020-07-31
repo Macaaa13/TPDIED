@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import died.tp.jpanel.camion.PanelCamiones;
+import died.tp.jpanel.insumo.PanelInsumos;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -65,7 +66,9 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuInsumos = new JButton("Insumos");
 		botonMenuInsumos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
+				setBounds(dim.width/2-600,dim.height/2-225, 1200, 450);
+				setContentPane(new PanelInsumos());
+				setTitle("Insumos");
 			}
 		});
 		botonMenuInsumos.setBounds(210, 160, 120, 30);

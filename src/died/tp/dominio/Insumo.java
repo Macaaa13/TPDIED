@@ -11,6 +11,8 @@ public abstract class Insumo {
 	public abstract Integer pesoPorUnidad();
 	public abstract boolean esLiquido();
 	public abstract boolean esGeneral();
+	public abstract void setPesoDensidad(Double d);
+	public abstract Double getPesoDensidad();
 	
 	//Constructor
 	public Insumo(String d, String u, Integer c) {
@@ -18,6 +20,8 @@ public abstract class Insumo {
 		this.uMedida = u;
 		this.costo = c;
 	}
+	
+	public Insumo() {};
 	
 	
 	//Getters and setters

@@ -217,9 +217,9 @@ public class PanelCamiones extends JPanel {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//cc.buscar();
-				tablaModelo.mostrar(cc.traerDatos());
+				tablaModelo.mostrar(cc.buscar());
 				tablaModelo.fireTableDataChanged();
+				
 				btnCancelar.setEnabled(true);
 				btnAgregar.setEnabled(false);
 				btnModificar.setEnabled(true);
@@ -257,7 +257,6 @@ public class PanelCamiones extends JPanel {
 		
 		dateChooserFechaCompra = new JDateChooser();
 		dateChooserFechaCompra.setBounds(180, 261, 120, 20);
-		dateChooserFechaCompra.setDate(Date.valueOf(LocalDate.now()));
 		add(dateChooserFechaCompra);
 		
 		textFieldCostoHora = new JTextField();
@@ -318,13 +317,13 @@ public class PanelCamiones extends JPanel {
 	}
 	
 	public void limpiar() {
-		textFieldPatente.setText("");
-		textFieldMarca.setText("");
-		textFieldModelo.setText("");
-		textFieldKMRecorridos.setText("");
-		textFieldCostoHora.setText("");
-		textFieldCostoKM.setText("");
-		dateChooserFechaCompra.setDate(Date.valueOf(LocalDate.now()));
+		textFieldPatente.setText(null);
+		textFieldMarca.setText(null);
+		textFieldModelo.setText(null);
+		textFieldKMRecorridos.setText(null);
+		textFieldCostoHora.setText(null);
+		textFieldCostoKM.setText(null);
+		dateChooserFechaCompra.setDate(null);
 	}
 	
 	public void cargarFilaSeleccionada(ModeloTablaCamion mtc, int fila) {

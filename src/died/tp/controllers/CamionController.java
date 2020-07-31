@@ -41,14 +41,18 @@ public class CamionController {
 		lista.addAll(cd.buscarTodos());
 	}
 	
+	/** Como para la busqueda de camiones pueden completarse todos, algunos o ningun campo, se valida que estos no estén vacios
+	 *  Se asigna a c un nuevo camion porque de lo contrario quedan guardados los datos anteriores
+	 */
 	public void actualizarModelo() {
-			c.setPatente(pc.getTextFieldPatente().getText());
-			c.setMarca(pc.getTextFieldMarca().getText());
-			c.setModelo(pc.getTextFieldModelo().getText());
-			c.setKmRecorridos(Double.valueOf(pc.getTextFieldKMRecorridos().getText()));
-			c.setCostoKM(Double.valueOf(pc.getTextFieldCostoKM().getText()));
-			c.setCostoHora(Double.valueOf(pc.getTextFieldCostoHora().getText()));
-			c.setFechaCompra(pc.getDateChooserFechaCompra().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		c = new Camion();
+		if(!pc.getTextFieldPatente().getText().isEmpty()) c.setPatente(pc.getTextFieldPatente().getText());
+		if(!pc.getTextFieldMarca().getText().isEmpty()) c.setMarca(pc.getTextFieldMarca().getText());
+		if(!pc.getTextFieldModelo().getText().isEmpty()) c.setModelo(pc.getTextFieldModelo().getText());
+		if(!pc.getTextFieldKMRecorridos().getText().isEmpty()) c.setKmRecorridos(Double.valueOf(pc.getTextFieldKMRecorridos().getText()));	
+		if(!pc.getTextFieldCostoKM().getText().isEmpty()) c.setCostoKM(Double.valueOf(pc.getTextFieldCostoKM().getText()));	
+		if(!pc.getTextFieldCostoHora().getText().isEmpty()) c.setCostoHora(Double.valueOf(pc.getTextFieldCostoHora().getText()));	
+		if(pc.getDateChooserFechaCompra().getDate() != null) c.setFechaCompra(pc.getDateChooserFechaCompra().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());		
 	}
 	
 	public List<Camion> traerDatos() {
@@ -66,7 +70,7 @@ public class CamionController {
 		if(pc.getTextFieldKMRecorridos().getText().isEmpty()) {pc.informarValidacion("Error, el campo kilometros recorridos está vacio"); return false;}
 		if(pc.getTextFieldCostoKM().getText().isEmpty()) {pc.informarValidacion("Error, el campo costo por kilometro está vacio"); return false;}
 		if(pc.getTextFieldCostoHora().getText().isEmpty()) {pc.informarValidacion("Error, el campo costo por hora está vacio"); return false;}
-		if(pc.getDateChooserFechaCompra() == null) {pc.informarValidacion("Error, no seleccionó la fecha"); return false;}
+		if(pc.getDateChooserFechaCompra().getDate() == null) {pc.informarValidacion("Error, no seleccionó la fecha"); return false;}
 		
 		
 		return true;
@@ -88,9 +92,44 @@ public class CamionController {
 	    }
 	}
 	
-	
-	//Cómo implementar la búsqueda por varios campos?
-	public void buscar() {
-		
+	public List<Camion> buscar() {
+		if(camposVacios()) {
+			return cd.buscarTodos();
+		}
+		else {
+			actualizarModelo();
+			return cd.buscarPorCampos(armarString());
+		}
 	}
+	
+	/**Si todos los campos son nulos la función retorna verdadero, indicando que no se busca por algún criterio en particular
+	 * sino que se deben traer todos los datos existentes
+	 * Si algun campo no es nulo, la función retorna falso, indicando que se busca por un criterio en particular
+	*/
+	public boolean camposVacios() {
+		if(pc.getTextFieldPatente().getText().isEmpty() &&
+		   pc.getTextFieldMarca().getText().isEmpty() &&
+		   pc.getTextFieldModelo().getText().isEmpty() &&
+		   pc.getTextFieldKMRecorridos().getText().isEmpty() &&
+		   pc.getTextFieldCostoKM().getText().isEmpty() &&
+		   pc.getTextFieldCostoHora().getText().isEmpty() &&
+		   pc.getDateChooserFechaCompra().getDate()==null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public String armarString() {
+		String s = new String();
+		if(c.getPatente()!=null) s+= "PATENTE = '" + c.getPatente() + "' AND " ;
+		if(c.getModelo()!=null) s+= "MODELO = '"+ c.getModelo() + "' AND ";
+		if(c.getMarca()!=null) s+= "MARCA = '" + c.getMarca() + "' AND ";
+		if(c.getKmRecorridos()!=null) s+= "KMRECORRIDOS = '" + c.getKmRecorridos().toString() + "' AND ";
+		if(c.getCostoKM()!=null) s+= "COSTOKM = '" + c.getCostoKM().toString() + "' AND ";
+		if(c.getCostoHora()!=null) s+= "COSTOHORA = '" + c.getCostoHora().toString() + "' AND ";
+		if(c.getFechaCompra()!=null) s+= "FECHACOMPRA = '" + c.getFechaCompra().toString() + "' AND ";
+		System.out.println(s.substring(0, s.length()-4));
+		return s.substring(0, s.length()-4);
+	}
+	
 }

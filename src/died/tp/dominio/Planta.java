@@ -1,16 +1,22 @@
 package died.tp.dominio;
 
+import java.util.*;
+
 public class Planta {
 
 	//Atributos
 	private Integer id;
 	private String nombrePlanta;
+	private List<Stock> stockInsumos;
 	
 	
 	//Constructor
 	public Planta (String np) {
 		this.nombrePlanta = np;
+		stockInsumos = new ArrayList<Stock>();
 	}
+	
+	public Planta() { }
 
 	
 	//Getters y Setters
@@ -30,5 +36,12 @@ public class Planta {
 		this.id = id;
 	}
 	
+	public List<Stock> getStockInsumos() {
+		return stockInsumos;
+	}
+
+	public void setStockInsumos(List<Stock> stockInsumos) {
+		this.stockInsumos = stockInsumos;
+	}
 	
 }

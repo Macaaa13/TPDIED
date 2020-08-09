@@ -29,6 +29,7 @@ public class Conexion {
 	private static String crearTablaInsumo =
 			"CREATE TABLE IF NOT EXISTS Insumo("
 			+ "id_insumo INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "descripcion VARCHAR(50) NOT NULL UNIQUE,"
 			+ "unidadMedida VARCHAR(10),"
 			+ "costoUnidad DOUBLE,"
 			+ "peso DOUBLE,"
@@ -38,8 +39,18 @@ public class Conexion {
 	private static String crearTablaPlanta = 
 			"CREATE TABLE IF NOT EXISTS Planta("
 			+ "id_planta INT PRIMARY KEY AUTO_INCREMENT,"
-			+ "nombrePlanta VARCHAR(15)"
+			+ "nombrePlanta VARCHAR(15) NOT NULL UNIQUE"
 			+ ")";
+	
+	private static String crearTablaPlantaStock = 
+			"CREATE TABLE IF NOT EXISTS PlantaStock("
+			+ "id_planta INT REFERENCES Planta(id_planta),"
+			+ "id_insumo INT REFERENCES Insumo(id_insumo),"
+			+ "cantidad INT,"
+			+ "puntoPedido INT,"
+			+ "PRIMARY KEY(id_planta,id_insumo)"
+			+ ")";
+	
 	private static String crearTablaOrdenPedido = 
 			"CREATE TABLE IF NOT EXISTS OrdenPedido("
 			+ "id_ordenPedido INT PRIMARY KEY AUTO_INCREMENT,"
@@ -49,14 +60,17 @@ public class Conexion {
 			+ "camionAsignado INT REFERENCES Camion(id_camion)"
 			+ ")";
 
+	private static String crearTablaRuta = 
+			"CREATE TABLE IF NOT EXISTS Ruta("
+			+ "id_ruta INT PRIMARY KEY AUTO_INCREMENT,"
+			+ "plantaOrigen INT REFERENCES Planta(id_planta),"
+			+ "plantaDestino INT REFERENCES Planta(id_planta),"
+			+ "distancia INT,"
+			+ "horasEstimadas Double,"
+			+ "pesoMaximo INT"
+			+ ")";
 
-
-
-
-
-	public Conexion() {
-
-	}
+	public Conexion() { }
 
 	public static Connection conectar() {
 		pr = new Properties();
@@ -94,7 +108,11 @@ public class Conexion {
 			  stmt.execute();
 			  stmt = con.prepareStatement(crearTablaPlanta);
 			  stmt.execute();
+			  stmt = con.prepareStatement(crearTablaPlantaStock);
+			  stmt.execute();
 			  stmt = con.prepareStatement(crearTablaOrdenPedido);
+			  stmt.execute();
+			  stmt = con.prepareStatement(crearTablaRuta);
 			  stmt.execute();
 			  stmt.close();	     
 			  tablasCreadas = true;

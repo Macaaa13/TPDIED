@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 
 import died.tp.jpanel.camion.PanelCamiones;
 import died.tp.jpanel.insumo.PanelInsumos;
+import died.tp.jpanel.planta.PanelPlantas;
+import died.tp.jpanel.stock.PanelStock;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -57,7 +59,9 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuPlantas = new JButton("Plantas");
 		botonMenuPlantas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
+				setBounds(dim.width/2-350,dim.height/2-225, 750, 450);
+				setContentPane(new PanelPlantas());
+				setTitle("Plantas");
 			}
 		});
 		botonMenuPlantas.setBounds(210, 115, 120, 30);
@@ -77,7 +81,9 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuStock = new JButton("Stock");
 		botonMenuStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				setBounds(dim.width/2-450,dim.height/2-225, 900, 450);
+				setContentPane(new PanelStock());
+				setTitle("Stock");
 			}
 		});
 		botonMenuStock.setBounds(210, 205, 120, 30);

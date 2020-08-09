@@ -1,11 +1,13 @@
 package died.tp.jpanel.insumo;
 
 import java.awt.BorderLayout;
+
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.*;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +21,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import died.tp.controllers.InsumoController;
+import died.tp.dominio.Insumo;
+import died.tp.excepciones.DatosObligatoriosException;
+import died.tp.excepciones.FormatoNumeroException;
 import died.tp.jframes.MenuPrincipal;
 import died.tp.jpanel.camion.PanelCamiones;
 
@@ -114,24 +119,66 @@ public class PanelInsumos extends JPanel {
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(ic.validacionVacios()) {
-					if(ic.camposCorrectos()) {
-						ic.setearInsumo(comboBoxTipo.getSelectedItem().toString());
-						ic.guardar();
-						JOptionPane.showMessageDialog(null, "Insumo agregado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
-						limpiar();
+				try {
+					if(ic.validacionVacios()) {
+						if(ic.camposCorrectos()) {
+							ic.guardar(null);
+							JOptionPane.showMessageDialog(null, "Insumo agregado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+							limpiar();
+						}
 					}
-				}
+					} catch(DatosObligatoriosException | FormatoNumeroException ex) {
+						System.out.println(ex.getMessage());;
+					}
 			}
 		});
 		btnAgregar.setBounds(50, 359, 120, 30);
 		add(btnAgregar);
 		
 		JButton btnModificar = new JButton("Modificar");
+		
 		btnModificar.setBounds(440, 359, 120, 30);
 		add(btnModificar);
-		
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(tablaDatos.getSelectedRow() != -1) {
+					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de modificar el insumo?", "Advertencia", JOptionPane.YES_NO_OPTION);
+					if(rta == JOptionPane.YES_OPTION) {
+						if(ic.validacionVacios()) {
+							if(ic.camposCorrectos()) {
+								List<Integer> stocks = new ArrayList<Integer>();
+								ic.actualizar((Integer)tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0),stocks);
+								tablaModelo.mostrar(ic.traerDatos(stocks),stocks);
+								tablaModelo.fireTableDataChanged();
+								JOptionPane.showMessageDialog(null, "Insumo modificado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+								limpiar();
+							}
+						}
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar el insumo que desea modificar", "Advertencia", JOptionPane.OK_OPTION);
+				}
+			}
+		});
 		JButton btnEliminar = new JButton("Eliminar");	
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tablaDatos.getSelectedRow() != -1) {
+					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el camión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+					if(rta == JOptionPane.YES_OPTION) {
+						ic.eliminarInsumo(tablaModelo.eliminarFila(tablaDatos.getSelectedRow()));
+						tablaModelo.fireTableDataChanged();
+						limpiar();
+						JOptionPane.showMessageDialog(null, "Camión eliminado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
+					} 
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar el camión que desea eliminar", "Advertencia", JOptionPane.OK_OPTION);
+				}
+			}
+		});
 		btnEliminar.setBounds(310, 359, 120, 30);
 		add(btnEliminar);
 		
@@ -168,13 +215,27 @@ public class PanelInsumos extends JPanel {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaModelo.mostrar(ic.traerDatos());
+				List<Integer> stocks = new ArrayList<Integer>();
+				String[] campos = new String [8];
+				Integer cantidad = ic.completarCampos(campos);
+				if(cantidad == 0) {
+					tablaModelo.mostrar(ic.traerDatos(stocks),stocks);
+				}
+				else {
+					List<Insumo> insumos = ic.buscarPorCampos(campos, cantidad,stocks);
+					if(!insumos.isEmpty()) {
+						tablaModelo.mostrar(insumos,stocks);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "No hay resultados que mostrar.");
+					}
+				}
 				tablaModelo.fireTableDataChanged();
-				
 				btnCancelar.setEnabled(true);
 				btnAgregar.setEnabled(false);
 				btnModificar.setEnabled(true);
 				btnEliminar.setEnabled(true);
+				limpiar();
 			}
 		});
 		btnBuscar.setBounds(180, 359, 120, 30);
@@ -263,15 +324,32 @@ public class PanelInsumos extends JPanel {
 		JOptionPane.showMessageDialog(null, error);
 	}
 	
-	
 	private void limpiar() {
 		textFieldCosto.setText(null);
 		textFieldPeso.setText(null);
+		textFieldDensidad.setText(null);
 		textFieldUnidadMedida.setText(null);
 		textFieldDescripcion.setText(null);
 	}
 	
 	public void cargarFilaSeleccionada(ModeloTablaInsumo mti, int fila) {
-		
+		textFieldDescripcion.setText(mti.getValueAt(fila, 1).toString());
+		textFieldUnidadMedida.setText(mti.getValueAt(fila, 2).toString());
+		textFieldCosto.setText(mti.getValueAt(fila, 3).toString());
+		if(mti.getValueAt(fila, 4).equals(0)) {
+			ic.cambiarInsumo("liquido");
+			textFieldDensidad.setText(mti.getValueAt(fila, 5).toString());
+			textFieldPeso.setEditable(false);
+			textFieldDensidad.setEditable(true);
+			textFieldPeso.setText("");
+		}
+		else {
+			ic.cambiarInsumo("general");
+			textFieldPeso.setText(mti.getValueAt(fila, 4).toString());
+			textFieldDensidad.setEditable(false);
+			textFieldPeso.setEditable(true);
+			textFieldDensidad.setText("");
+		}
 	}
+
 }

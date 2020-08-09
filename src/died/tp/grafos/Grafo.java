@@ -17,14 +17,37 @@ import java.util.stream.Collectors;
 
 
 public class Grafo<T> {
+	
+	//Atributos
 	private List<Arista<T>> aristas;
 	private List<Vertice<T>> vertices;
 
+	
+	//Constructor
 	public Grafo(){
 		this.aristas = new ArrayList<Arista<T>>();
 		this.vertices = new ArrayList<Vertice<T>>();
 	}
+	
+	//Getters y Setters
+	public List<Arista<T>> getAristas() {
+		return aristas;
+	}
 
+	public void setAristas(List<Arista<T>> aristas) {
+		this.aristas = aristas;
+	}
+
+	public List<Vertice<T>> getVertices() {
+		return vertices;
+	}
+
+	public void setVertices(List<Vertice<T>> vertices) {
+		this.vertices = vertices;
+	}
+	
+	
+	//Métodos
 	public void addNodo(T nodo){
 		this.addNodo(new Vertice<T>(nodo));
 	}
@@ -34,19 +57,15 @@ public class Grafo<T> {
 	}
 	
 	public void conectar(T n1,T n2){
-		this.conectar(getNodo(n1), getNodo(n2), 0.0);
+		this.conectar(getNodo(n1), getNodo(n2));
 	}
 
-	public void conectar(T n1,T n2,Number valor){
-		this.conectar(getNodo(n1), getNodo(n2), valor);
-	}
-
-	private void conectar(Vertice<T> nodo1,Vertice<T> nodo2,Number valor){
-		this.aristas.add(new Arista<T>(nodo1,nodo2,valor));
+	private void conectar(Vertice<T> nodo1, Vertice<T> nodo2){
+		this.aristas.add(new Arista<T>(nodo1,nodo2));
 	}
 	
 	public Vertice<T> getNodo(T valor){
-		return this.vertices.get(this.vertices.indexOf(new Vertice<T>(valor)));
+		return this.vertices.get(vertices.indexOf(new Vertice<T>(valor)));
 	}
 
 	public List<T> getAdyacentes(T valor){ 

@@ -4,6 +4,7 @@ import java.util.*;
 import died.tp.dao.PlantaDao;
 import died.tp.dominio.Planta;
 import died.tp.dominio.Ruta;
+import died.tp.grafos.GrafoRutas;
 import died.tp.jpanel.planta.PanelPlantas;
 
 public class PlantaController {
@@ -12,14 +13,14 @@ public class PlantaController {
 	 private PlantaDao psd;
 	 private PanelPlantas pp;
 	 private List<Planta> lista;
-	 private RutaController rc;
+	 private GrafoRutas gr;
 	 
 	 //Constructor
 	 public PlantaController(PanelPlantas ps) {
 		 psd = new PlantaDao();
 		 pp = ps;
 		 lista = new ArrayList<Planta>();
-		 rc = new RutaController();
+		 gr = new GrafoRutas();
 	 }
 	 
 	 public List<Planta> getPlantas() {
@@ -29,12 +30,7 @@ public class PlantaController {
 	 public void agregarPlanta() {
 		 	String nombrePlanta = pp.getTextFieldPlanta().getText();
 			psd.altaPlanta(nombrePlanta);
-			lista = this.getPlantas();
-			if(lista.size()>1) {
-				Planta destino = lista.get(new Random().nextInt(lista.size()-1));
-				Ruta r = new Ruta(lista.get(lista.size()-1), destino);
-				rc.agregarRuta(r);
-			}
+			gr.agregar(this.getPlantas());
 		}
 	 
 }

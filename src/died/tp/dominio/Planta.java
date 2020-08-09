@@ -44,4 +44,14 @@ public class Planta {
 		this.stockInsumos = stockInsumos;
 	}
 	
+	
+	//Métodos
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Planta) {
+			Planta p = (Planta) o;
+			if(this.getId() == p.getId()) return true;
+		}
+		return false;
+	}
 }

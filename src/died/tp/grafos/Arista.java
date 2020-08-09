@@ -1,25 +1,33 @@
 package died.tp.grafos;
 
+import java.util.Random;
+
 public class Arista<T> {
+	
+	//Atributos
 	private Vertice<T> inicio;
 	private Vertice<T> fin;
-	private Number valor;
-
+	private Integer distancia;
+	private Double duracionEstimada;
+	private Integer pesoMax;
+	
+	
+	//Constructores
 	public Arista(){
-		valor=0.0;
+		
 	} 
 	
 	public Arista(Vertice<T> ini,Vertice<T> fin){
-		this();
 		this.inicio = ini;
 		this.fin = fin;
-	}
-
-	public Arista(Vertice<T> ini,Vertice<T> fin,Number val){
-		this(ini,fin);
-		this.valor= val;
+		Random r = new Random();
+		this.distancia = r.nextInt(300)+15;
+		this.duracionEstimada = Math.round((distancia/60.0)*100.0)/100.0;
+		this.pesoMax = r.nextInt(500)+50;
 	}
 	
+	
+	//Getters y Setters
 	public Vertice<T> getInicio() {
 		return inicio;
 	}
@@ -36,15 +44,32 @@ public class Arista<T> {
 		this.fin = fin;
 	}
 
-	public Number getValor() {
-		return valor;
+	public Integer getDistancia() {
+		return distancia;
 	}
 
-	public void setValor(Number valor) {
-		this.valor = valor;
+	public void setDistancia(Integer distancia) {
+		this.distancia = distancia;
 	}
+
+	public Double getDuracionEstimada() {
+		return duracionEstimada;
+	}
+
+	public void setDuracionEstimada(Double duracionEstimada) {
+		this.duracionEstimada = duracionEstimada;
+	}
+
+	public Integer getPesoMax() {
+		return pesoMax;
+	}
+
+	public void setPesoMax(Integer pesoMax) {
+		this.pesoMax = pesoMax;
+	}
+
 	
-	
+	//Métodos
 	@Override
 	public String toString() {
 		return "( "+this.inicio.getValor()+" --> "+this.fin.getValor()+" )";
@@ -52,6 +77,9 @@ public class Arista<T> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return (obj instanceof Arista<?>) && ((Arista<?>)obj).getValor().equals(this.valor); 
+		return (obj instanceof Arista<?>) && 
+			   ((Arista<?>)obj).getDistancia().equals(this.getDistancia()) &&
+			   ((Arista<?>)obj).getDuracionEstimada().equals(this.getDuracionEstimada()) &&
+			   ((Arista<?>)obj).getPesoMax().equals(this.getPesoMax());
 	}
 }

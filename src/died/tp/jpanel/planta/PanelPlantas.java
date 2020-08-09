@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import died.tp.controllers.PlantaController;
 import died.tp.dominio.Planta;
-import died.tp.grafos.GrafoPlantas;
+import died.tp.grafos.GrafoRutas;
 import died.tp.jframes.MenuPrincipal;
 
 public class PanelPlantas extends JPanel {
@@ -26,7 +26,7 @@ public class PanelPlantas extends JPanel {
 	//Atributos
 	private PlantaController pc;
 	private JTextField textFieldPlanta;
-	private GrafoPlantas gp;
+	private GrafoRutas gp;
 	
 	
 	//Getters y Setters

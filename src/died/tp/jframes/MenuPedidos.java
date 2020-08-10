@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import died.tp.jpanel.pedido.PanelInformacionOrden;
 import died.tp.jpanel.pedido.PanelProcesarOrden;
-import died.tp.jpanel.pedido.PanelRegistrarOrden;
+import died.tp.jpanel.pedido.PanelOrdenEntregada;
 import died.tp.jpanel.pedido.RegistrarOrden;
 
 import javax.swing.JButton;
@@ -28,6 +28,7 @@ public class MenuPedidos extends JFrame {
 	 */
 	public MenuPedidos() {
 		setTitle("Pedidos");
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(dim.width/2-275,dim.height/2-200, 550, 400);
 		contentPane = new JPanel();
@@ -50,7 +51,7 @@ public class MenuPedidos extends JFrame {
 		btnRegistrarOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setBounds(dim.width/2-450,dim.height/2-225, 950, 500);
-				setContentPane(new PanelRegistrarOrden());
+				setContentPane(new PanelOrdenEntregada());
 				setTitle("Registrar orden pedido");
 			}
 		});

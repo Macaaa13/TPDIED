@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public class Conexion {
 
+
 	private static final String url = "jdbc:mysql://localhost:3306/trabajopracticodied";
 	private static final String usuario = "root";
 	private static final String clave = "root";
@@ -25,7 +26,7 @@ public class Conexion {
 			+ "costoKM DOUBLE,"
 			+ "fechaCompra DATE"
 			+ ")";
-
+	
 	private static String crearTablaInsumo =
 			"CREATE TABLE IF NOT EXISTS Insumo("
 			+ "id_insumo INT PRIMARY KEY AUTO_INCREMENT,"
@@ -35,13 +36,12 @@ public class Conexion {
 			+ "peso DOUBLE,"
 			+ "densidad DOUBLE"
 			+ ")";
-
+	
 	private static String crearTablaPlanta = 
 			"CREATE TABLE IF NOT EXISTS Planta("
 			+ "id_planta INT PRIMARY KEY AUTO_INCREMENT,"
 			+ "nombrePlanta VARCHAR(15) NOT NULL UNIQUE"
 			+ ")";
-	
 	private static String crearTablaPlantaStock = 
 			"CREATE TABLE IF NOT EXISTS PlantaStock("
 			+ "id_planta INT REFERENCES Planta(id_planta),"
@@ -57,9 +57,20 @@ public class Conexion {
 			+ "plantaOrigen INT REFERENCES Planta(id_planta),"
 			+ "plantaDestino INT REFERENCES Planta(id_planta),"
 			+ "estado ENUM ('creada','procesada','entregada','cancelado'),"
-			+ "camionAsignado INT REFERENCES Camion(id_camion)"
+			+ "camionAsignado INT REFERENCES Camion(id_camion),"
+			+ "fechaEntrega DATE"
 			+ ")";
-
+	
+	
+	//CREO ESTA TABLA NUEVA PARA MANTENER LAS FORMAS NORMALES
+	private static String crearTablaOrdenInsumos = 
+			"CREATE TABLE IF NOT EXISTS OrdenInsumos("
+			+ "id_ordenPedido INT REFERENCES OrdenPedido(id_ordenPedido),"
+			+ "id_insumo INT REFERENCES Insumo(id_insumo),"
+			+ "cantidadInsumo INT,"
+			+ "PRIMARY KEY(id_ordenPedido,id_insumo)"
+			+ ")";
+	
 	private static String crearTablaRuta = 
 			"CREATE TABLE IF NOT EXISTS Ruta("
 			+ "plantaOrigen INT REFERENCES Planta(id_planta),"
@@ -69,8 +80,11 @@ public class Conexion {
 			+ "pesoMaximo INT,"
 			+ "PRIMARY KEY(plantaOrigen, plantaDestino)"
 			+ ")";
-
-	public Conexion() { }
+	
+	
+	public Conexion() {
+		
+	}
 
 	public static Connection conectar() {
 		pr = new Properties();
@@ -78,14 +92,12 @@ public class Conexion {
 		pr.put("password",clave);
 		Connection c = null;
 		try {
-			c = DriverManager.getConnection(url,pr);			
-			//System.out.println("Conexión realizada");
-
+			c = DriverManager.getConnection(url,pr);
 		} catch(SQLException e) {
 				System.out.println("Error en la conexión");
 				e.printStackTrace();
 		} 
-
+	
 	return c;
 	}
 
@@ -93,7 +105,7 @@ public class Conexion {
 		crearTablas();
 		return conectar();
 	}
-
+	
 	public static void crearTablas() throws SQLException {
 		if(!tablasCreadas) {
 
@@ -113,6 +125,8 @@ public class Conexion {
 			  stmt = con.prepareStatement(crearTablaOrdenPedido);
 			  stmt.execute();
 			  stmt = con.prepareStatement(crearTablaRuta);
+			  stmt.execute();	
+			  stmt = con.prepareStatement(crearTablaOrdenInsumos);
 			  stmt.execute();
 			  stmt.close();	     
 			  tablasCreadas = true;
@@ -122,4 +136,4 @@ public class Conexion {
 			}
 		}
 	}
-} 
+}

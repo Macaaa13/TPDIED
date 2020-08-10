@@ -27,13 +27,13 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class PanelRegistrarOrden extends JPanel{
+public class PanelOrdenEntregada extends JPanel{
 	private JTextField textFieldPrecioTotal;
 	private OrdenPedidoController opc;
 	private JComboBox<String> comboBoxPlanta;
 	JDateChooser dateChooserFechaMaxima;
 	
-	public PanelRegistrarOrden () {
+	public PanelOrdenEntregada () {
 		setLayout(null);
 		setSize(900,450);
 		setSize(900,450);
@@ -89,7 +89,7 @@ public class PanelRegistrarOrden extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				int rta = JOptionPane.showConfirmDialog(null, "¿Desea volver al menu principal? \n Los datos no guardados se perderán", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
 				if(rta == JOptionPane.OK_OPTION) {
-					Window w = SwingUtilities.getWindowAncestor(PanelRegistrarOrden.this);
+					Window w = SwingUtilities.getWindowAncestor(PanelOrdenEntregada.this);
 					w.dispose();
 					MenuPedidos mp = new MenuPedidos();
 					mp.setVisible(true);

@@ -92,7 +92,8 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuPedidos = new JButton("Pedidos");
 		botonMenuPedidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				MenuPedidos mp = new MenuPedidos();
+				dispose();
 			}
 		});
 		botonMenuPedidos.setBounds(210, 238, 120, 30);

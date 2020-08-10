@@ -5,7 +5,7 @@ public class Vertice<T>implements Comparable<T> {
 	//Atributos
 	private T valor;
 	private boolean visitado;
-	private double dist = Double.MAX_VALUE;
+	private Integer dist;
 	
 	
 	//Constructores
@@ -33,11 +33,11 @@ public class Vertice<T>implements Comparable<T> {
 		this.visitado = visitado;
 	}
 
-	public double getDist() {
+	public Integer getDist() {
 		return dist;
 	}
 
-	public void setDist(double dist) {
+	public void setDist(Integer dist) {
 		this.dist = dist;
 	}
 

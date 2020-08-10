@@ -12,20 +12,20 @@ import died.tp.dao.PlantaStockDao;
 import died.tp.dominio.Insumo;
 import died.tp.dominio.OrdenDePedido;
 import died.tp.dominio.Planta;
-import died.tp.jpanel.pedido.PanelRegistrarOrden;
+import died.tp.jpanel.pedido.PanelOrdenEntregada;
 
 public class OrdenPedidoController {
 
 	Map<Insumo,Integer> insumosOrden;
 	List<Planta> plantas;
 	List<Integer> cantidades;
-	PanelRegistrarOrden pro;
+	PanelOrdenEntregada pro;
 	PlantaStockDao psd;
 	OrdenDePedidoDao opd;
 	InsumoDao isd;
 	Integer totalCompra;
 	
-	public OrdenPedidoController(PanelRegistrarOrden pr) {
+	public OrdenPedidoController(PanelOrdenEntregada pr) {
 		 pro = pr;
 		 insumosOrden = new HashMap<Insumo,Integer>();
 		 plantas = new ArrayList<Planta>();

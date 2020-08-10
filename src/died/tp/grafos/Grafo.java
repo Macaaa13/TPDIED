@@ -65,9 +65,23 @@ public class Grafo<T> {
 	}
 	
 	public Vertice<T> getNodo(T valor){
-		return this.vertices.get(vertices.indexOf(new Vertice<T>(valor)));
+		Vertice<T> nuevoVertice = new Vertice<T>(valor);
+		if(vertices.indexOf(nuevoVertice) != -1) {
+			return this.vertices.get(vertices.indexOf(nuevoVertice));
+		} else {
+			return nuevoVertice;
+		}
 	}
 
+	public Arista<T> arista(Vertice<T> v1, Vertice<T> v2){
+    	for(Arista<T> a: this.aristas) {
+    		if(v1.equals(a.getInicio()) && v2.equals(a.getFin())){
+    			return a;
+    		}
+    	}
+    	return null;
+    }
+	
 	public List<T> getAdyacentes(T valor){ 
 		Vertice<T> unNodo = this.getNodo(valor);
 		List<T> salida = new ArrayList<T>();

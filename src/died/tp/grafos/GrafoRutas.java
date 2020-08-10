@@ -2,6 +2,8 @@ package died.tp.grafos;
 
 import died.tp.controllers.RutaController;
 import died.tp.dominio.Planta;
+import died.tp.dominio.Ruta;
+
 import java.util.*;
 
 public class GrafoRutas extends Grafo<Planta> {
@@ -25,27 +27,23 @@ public class GrafoRutas extends Grafo<Planta> {
 	 *   Una vez agregada la ruta al grafo, se busca la última arista agregada que contiene todos los datos necesarios
 	 *   para crear la ruta, y el controller se ocupa de indicarle al dao que debe guardar los datos en la base de datos
 	 */
-	public void agregarRuta() {
-		
-	}
-	
-	public List<Planta> getRutaCorta(Planta origen, Planta destino){
-		List<Planta> rutaInicial = new LinkedList<Planta>();
-		rutaInicial.add(origen);
-		return getRutaCorta(origen, destino, rutaInicial);
-	}
-	
-	public List<Planta> getRutaCorta(Planta origen, Planta destino, List<Planta> listaPlantas){
-		List<Planta> adyacentes = this.getAdyacentes(origen);
-		for(Planta p: adyacentes) {
-			if(p.equals(destino)) {
-				listaPlantas.add(p);
-				return listaPlantas;
-			} else {
-				
-			}
+	public void armarGrafo(List<Ruta> lista) {
+		for(Ruta r: lista) {
+			if(!this.getVertices().contains(this.getNodo(r.getOrigen()))) { this.addNodo(r.getOrigen()); } ;
+			if(!this.getVertices().contains(this.getNodo(r.getDestino()))) { this.addNodo(r.getDestino()); } ;
+			this.conectar(r.getOrigen(), r.getDestino(), r.getDistancia(), r.getDuracionEstimada(), r.getPesoMax());
 		}
-		return null;
 	}
+	
+	public List<Planta> getRutaCorta(Planta destino){
+		List<Planta> camino = new ArrayList<Planta>();
+		
+		
+		
+		Collections.reverse(camino);
+		return camino;
+	}
+	
+	
 	
 }

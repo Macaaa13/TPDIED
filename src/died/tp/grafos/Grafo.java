@@ -80,7 +80,7 @@ public class Grafo<T> {
 	}
 	
 
-	private List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
+	public List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
 		List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
 		for(Arista<T> enlace : this.aristas){
 			if( enlace.getInicio().equals(unNodo)){

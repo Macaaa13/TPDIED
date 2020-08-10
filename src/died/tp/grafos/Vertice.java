@@ -1,9 +1,11 @@
 package died.tp.grafos;
 
-public class Vertice<T> {
+public class Vertice<T>implements Comparable<T> {
 	
 	//Atributos
 	private T valor;
+	private boolean visitado;
+	private double dist = Double.MAX_VALUE;
 	
 	
 	//Constructores
@@ -23,7 +25,22 @@ public class Vertice<T> {
 		return this.valor;
 	}
 	
-	
+	public boolean isVisitado() {
+		return visitado;
+	}
+
+	public void setVisitado(boolean visitado) {
+		this.visitado = visitado;
+	}
+
+	public double getDist() {
+		return dist;
+	}
+
+	public void setDist(double dist) {
+		this.dist = dist;
+	}
+
 	//Métodos
 	@Override
 	public int hashCode() {
@@ -48,6 +65,12 @@ public class Vertice<T> {
 	@Override
 	public String toString() {
 		return valor.toString();
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		Vertice v = (Vertice) o;
+		return Double.compare(this.dist, v.getDist());
 	}
 	
 }

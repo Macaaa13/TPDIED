@@ -1,9 +1,9 @@
 package died.tp.jframes;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import died.tp.jpanel.camion.PanelCamiones;
 import died.tp.jpanel.insumo.PanelInsumos;
 import died.tp.jpanel.planta.PanelPlantas;
@@ -53,7 +53,7 @@ public class MenuPrincipal extends JFrame {
 				setTitle("Camiones");
 			}
 		});
-		botonMenuCamiones.setBounds(210, 70, 120, 30);
+		botonMenuCamiones.setBounds(210, 58, 120, 30);
 		PanelInicial.add(botonMenuCamiones);
 		
 		JButton botonMenuPlantas = new JButton("Plantas");
@@ -64,7 +64,7 @@ public class MenuPrincipal extends JFrame {
 				setTitle("Plantas");
 			}
 		});
-		botonMenuPlantas.setBounds(210, 115, 120, 30);
+		botonMenuPlantas.setBounds(210, 103, 120, 30);
 		PanelInicial.add(botonMenuPlantas);
 		
 		JButton botonMenuInsumos = new JButton("Insumos");
@@ -75,7 +75,7 @@ public class MenuPrincipal extends JFrame {
 				setTitle("Insumos");
 			}
 		});
-		botonMenuInsumos.setBounds(210, 160, 120, 30);
+		botonMenuInsumos.setBounds(210, 148, 120, 30);
 		PanelInicial.add(botonMenuInsumos);
 		
 		JButton botonMenuStock = new JButton("Stock");
@@ -86,7 +86,7 @@ public class MenuPrincipal extends JFrame {
 				setTitle("Stock");
 			}
 		});
-		botonMenuStock.setBounds(210, 205, 120, 30);
+		botonMenuStock.setBounds(210, 193, 120, 30);
 		PanelInicial.add(botonMenuStock);
 		
 		JButton botonMenuPedidos = new JButton("Pedidos");
@@ -95,7 +95,17 @@ public class MenuPrincipal extends JFrame {
 
 			}
 		});
-		botonMenuPedidos.setBounds(210, 250, 120, 30);
+		botonMenuPedidos.setBounds(210, 238, 120, 30);
 		PanelInicial.add(botonMenuPedidos);
+		
+		JButton btnRutas = new JButton("Rutas");
+		btnRutas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MenuRutas mr = new MenuRutas();
+				dispose();
+			}
+		});
+		btnRutas.setBounds(210, 279, 120, 30);
+		PanelInicial.add(btnRutas);
 	}
 }

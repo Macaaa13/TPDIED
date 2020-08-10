@@ -50,7 +50,7 @@ public class Planta {
 	public boolean equals(Object o) {
 		if(o instanceof Planta) {
 			Planta p = (Planta) o;
-			if(this.getId() == p.getId()) return true;
+			if(this.getId().equals(p.getId())) return true;
 		}
 		return false;
 	}

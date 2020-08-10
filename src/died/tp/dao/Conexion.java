@@ -62,12 +62,12 @@ public class Conexion {
 
 	private static String crearTablaRuta = 
 			"CREATE TABLE IF NOT EXISTS Ruta("
-			+ "id_ruta INT PRIMARY KEY AUTO_INCREMENT,"
 			+ "plantaOrigen INT REFERENCES Planta(id_planta),"
 			+ "plantaDestino INT REFERENCES Planta(id_planta),"
 			+ "distancia INT,"
 			+ "horasEstimadas Double,"
-			+ "pesoMaximo INT"
+			+ "pesoMaximo INT,"
+			+ "PRIMARY KEY(plantaOrigen, plantaDestino)"
 			+ ")";
 
 	public Conexion() { }

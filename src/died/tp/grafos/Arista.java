@@ -17,13 +17,12 @@ public class Arista<T> {
 		
 	} 
 	
-	public Arista(Vertice<T> ini,Vertice<T> fin){
+	public Arista(Vertice<T> ini, Vertice<T> fin, Integer dist, Double durac, Integer pesoM){
 		this.inicio = ini;
 		this.fin = fin;
-		Random r = new Random();
-		this.distancia = r.nextInt(300)+15;
-		this.duracionEstimada = Math.round((distancia/60.0)*100.0)/100.0;
-		this.pesoMax = r.nextInt(500)+50;
+		distancia = dist;
+		duracionEstimada = durac;
+		pesoMax = pesoM;
 	}
 	
 	

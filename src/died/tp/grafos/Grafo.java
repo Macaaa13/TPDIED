@@ -56,12 +56,12 @@ public class Grafo<T> {
 		this.vertices.add(nodo);
 	}
 	
-	public void conectar(T n1,T n2){
-		this.conectar(getNodo(n1), getNodo(n2));
+	public void conectar(T n1,T n2, Integer d, Double de, Integer pm){
+		this.conectar(getNodo(n1), getNodo(n2), d, de, pm);
 	}
 
-	private void conectar(Vertice<T> nodo1, Vertice<T> nodo2){
-		this.aristas.add(new Arista<T>(nodo1,nodo2));
+	private void conectar(Vertice<T> nodo1, Vertice<T> nodo2, Integer d, Double de, Integer pm){
+		this.aristas.add(new Arista<T>(nodo1,nodo2,d,de,pm));
 	}
 	
 	public Vertice<T> getNodo(T valor){

@@ -1,39 +1,28 @@
 package died.tp.dominio;
 
-import java.text.DecimalFormat;
-import java.util.*;
-
 public class Ruta {
 
 	//Atributos
-	private Integer id;
 	private Planta origen;
 	private Planta destino;
 	private Integer distancia;
 	private Double duracionEstimada;
 	private Integer pesoMax;
 	
+	
 	//Constructores
 	public Ruta() {}
 
-	public Ruta(Planta origen, Planta destino) {
+	public Ruta(Planta origen, Planta destino, Integer dist, Double durac, Integer pesoM) {
 		this.origen = origen;
 		this.destino = destino;
-		Random r = new Random();
-		this.distancia = r.nextInt(300)+15;
-		this.duracionEstimada = distancia/60.0;
-		this.pesoMax = r.nextInt(500)+50;
+		this.distancia = dist;
+		this.duracionEstimada = durac;
+		this.pesoMax = pesoM;
 	}
 	
+	
 	//Getters y Setters
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public Planta getOrigen() {
 		return origen;
 	}

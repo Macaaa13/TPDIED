@@ -1,18 +1,22 @@
 package died.tp.jpanel.planta;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -20,6 +24,8 @@ import died.tp.controllers.PlantaController;
 import died.tp.dominio.Planta;
 import died.tp.grafos.GrafoRutas;
 import died.tp.jframes.MenuPrincipal;
+import died.tp.jpanel.camion.PanelCamiones;
+import died.tp.jpanel.ruta.PanelRutas;
 
 public class PanelPlantas extends JPanel {
 
@@ -27,6 +33,7 @@ public class PanelPlantas extends JPanel {
 	private PlantaController pc;
 	private JTextField textFieldPlanta;
 	private GrafoRutas gp;
+	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	
 	//Getters y Setters
@@ -87,12 +94,25 @@ public class PanelPlantas extends JPanel {
 		btnAgregarPlanta.setBounds(22, 93, 139, 23);
 		add(btnAgregarPlanta);
 		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiar();
+				btnAgregarPlanta.setEnabled(true);
+				btnCancelar.setEnabled(false);
+			}
+		});
+		btnCancelar.setBounds(522, 350, 89, 23);
+		add(btnCancelar);
+		
 		JButton btnBuscar = new JButton("Mostrar Plantas");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Planta> plantas = pc.getPlantas();
 				if(!plantas.isEmpty()) {
 				tablaModelo.mostrar(plantas);
+				btnAgregarPlanta.setEnabled(false);
+				btnCancelar.setEnabled(true);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No hay resultados por mostrar");
@@ -115,8 +135,11 @@ public class PanelPlantas extends JPanel {
 				}
 			}
 		});
-		btnVolver.setBounds(614, 352, 89, 23);
+		btnVolver.setBounds(621, 350, 89, 23);
 		add(btnVolver);
+		
+		btnCancelar.setEnabled(false);
+		
 	}
 	
 	public void limpiar() {
